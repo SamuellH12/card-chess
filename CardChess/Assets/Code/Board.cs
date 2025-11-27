@@ -11,17 +11,67 @@ public class Board : MonoBehaviour {
     
     [HideInInspector]
     public Cell[,] cells;
+    
+    [HideInInspector]
+    public List<Piece> pieces;
+
     [HideInInspector]
     public GlobalManager globalManager;
 
+    // list of prefabs with initial positions and color // show in inspector    [System.Serializable]
+    [System.Serializable]
+    public class InitialPiece {
+        public GameObject prefab;
+        public int x, y, player;
+        public InitialPiece(GameObject prefab, int x, int y, int player){ this.prefab = prefab; this.x = x; this.y = y; this.player = player; }
+        // to string
+        public override string ToString(){ return prefab.name + "(x=" + x + ", y=" + y + ", player=" + player + ")"; }
+    }
+
+    [Header("Initial pieces (set in inspector)")]
+    public List<InitialPiece> initialPieces = new List<InitialPiece>();
+    // piece prefabs
+    public GameObject kingPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        pieces = new List<Piece>();
         RecreateBoard();
+
+        // check if king exists in initial pieces, else add them
+        bool kingWhiteExists = false;
+        bool kingBlackExists = false;
+        foreach(InitialPiece ip in initialPieces){
+            AddPiece(ip.prefab, ip.x, ip.y, ip.player);
+            if(ip.prefab == kingPrefab){
+                if(ip.player == 0) kingWhiteExists = true;
+                if(ip.player == 1) kingBlackExists = true;
+            }
+        }
+
+        if(!kingWhiteExists) AddPiece(kingPrefab, 4, 0, 0);
+        if(!kingBlackExists) AddPiece(kingPrefab, 4, 7, 1);
     }
 
     // Update is called once per frame
     void Update(){ }
+
+    // add piece to the board by prefab
+    public bool AddPiece(GameObject piecePrefab, int x, int y, int player){
+        if(x < 0 || x >= H || y < 0 || y >= W) return false;
+        if(cells[x,y].piece != null) return false;
+
+        GameObject pieceObj = Instantiate(piecePrefab);
+        pieceObj.transform.parent = this.transform;
+
+        Piece piece = pieceObj.GetComponent<Piece>();
+        piece.player = player;
+        piece.MoveToCell(cells[x,y]);
+        piece.hasMoved = false;
+        pieces.Add(piece);
+
+        return true;
+    }
 
     void RecreateBoard(){
         cells = new Cell[H,W];
@@ -45,7 +95,13 @@ public class Board : MonoBehaviour {
                 }
                 cells[i,j].board = this;
                 cells[i,j].transform.position = new Vector3(i, j, 0);
+                
+                // if end, mark for pawn evolution
+                if(i == H-1) cells[i,j].canEvolveWhite = true;
+                if(i == 0  ) cells[i,j].canEvolveBlack = true;
             }
         }
     }
+
+    public bool IsInsideBoard(int x, int y){ return x >= 0 && x < H && y >= 0 && y < W; }
 }

@@ -15,9 +15,14 @@ public class Cell : MonoBehaviour {
     public SpriteRenderer highlightImage;
     public Piece piece = null;
     
-    // [HideInInspector]
+    [HideInInspector]
     public SpriteRenderer backgroundImage;
+    [HideInInspector]
     public Board board;
+    
+    // if can evolve pawn here
+    public bool canEvolveWhite = false;
+    public bool canEvolveBlack = false;
 
     void Start(){
         backgroundImage = GetComponent<SpriteRenderer>();
@@ -47,6 +52,5 @@ public class Cell : MonoBehaviour {
     }
     public void ClearHighlight(){
         highlightImage.enabled = false;
-        
     }
 }

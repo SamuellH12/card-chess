@@ -7,9 +7,13 @@ public class Piece : MonoBehaviour
     public int player = 0;
     public string pieceType = "Generic";
     public SpriteRenderer spriteRenderer;
+    public List<GameObject> evolutions = new List<GameObject>();
+    public bool hasMoved = false;
 
     void Start(){
-        
+        // change color based on player
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = player == 0 ? Color.white : Color.black;
     }
 
     void Update(){
@@ -20,11 +24,15 @@ public class Piece : MonoBehaviour
     // (implement variations in subclasses if needed)
     public virtual void MoveToCell(Cell newCell){
         if(cell) cell.piece = null;
+        hasMoved = true;
 
         cell = newCell;
         cell.piece = this;
 
         transform.position = new Vector3(newCell.x, newCell.y, 0);
+
+        // call manager to handle evolution
+        if(CanEvolve()) cell.board.globalManager.HandleEvolution(this);
     }
 
     // search for possible moves in the board
@@ -48,5 +56,14 @@ public class Piece : MonoBehaviour
         }
 
         return moves;
+    }
+
+    // list only the cells that can be attacked by this piece
+    public virtual List<Cell> ListOfAttacks(Board board){
+        return ListOfMoves(board);
+    }
+
+    public virtual bool CanEvolve(){
+        return false;
     }
 }
