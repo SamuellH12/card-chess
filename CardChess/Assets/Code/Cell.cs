@@ -2,39 +2,51 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Cell : MonoBehaviour {
+    /* 
+    Represents a cell in the board.
+    Holds position, references to board and piece, and handles clicks.
+    Requires:
+    - An Image component for background
+    - An Image component for highlight (initially disabled)
+    - A Collider2D component for click detection
+    */
 
     public int x, y;
-    public Board board;
-    public Image backgroundImage;
-    public Image highlightImage; // highlight image for possible moves
-
+    public SpriteRenderer highlightImage;
     public Piece piece = null;
+    
+    // [HideInInspector]
+    public SpriteRenderer backgroundImage;
+    public Board board;
 
-    void Start(){ }
-    void Update(){ }
+    void Start(){
+        backgroundImage = GetComponent<SpriteRenderer>();
+        highlightImage.enabled = false;
+    }
 
-    void fixedUpdate(){
+    void Update(){
+        // if clicked, tell global manager
+
+        if(Input.GetMouseButtonDown(0)){
         
-       // if clicked, select this cell
-       if (Input.GetMouseButtonDown(0)){
-           // get mouse position in world coordinates
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+
             // check if mouse is over this cell
+            // cell has a box collider2D
             Collider2D collider = GetComponent<Collider2D>();
             
             if(collider == Physics2D.OverlapPoint(mousePos2D)){
-                Debug.Log("Cell " + x + "," + y + " clicked.");
-                // select this cell
-                
-                // list possible moves for the piece in this cell
-                if(piece != null){
-
-                    
-                }
-
+                board.globalManager.ClickedCell(this);
             }
-       }
+        }
+    }
 
+    public void HighlightCell(){
+        highlightImage.enabled = true;
+    }
+    public void ClearHighlight(){
+        highlightImage.enabled = false;
+        
     }
 }

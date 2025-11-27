@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class Piece : MonoBehaviour
 {
     public Cell cell = null;
+    public int player = 0;
 
     void Start(){
         
@@ -11,6 +12,17 @@ public class Piece : MonoBehaviour
 
     void Update(){
         
+    }
+
+    // move piece to new cell
+    // (implement variations in subclasses if needed)
+    public virtual void MoveToCell(Cell newCell){
+        if(cell) cell.piece = null;
+
+        cell = newCell;
+        cell.piece = this;
+
+        transform.position = new Vector3(newCell.x, newCell.y, 0);
     }
 
     // search for possible moves in the board
