@@ -5,6 +5,8 @@ public class Piece : MonoBehaviour
 {
     public Cell cell = null;
     public int player = 0;
+    public string pieceType = "Generic";
+    public SpriteRenderer spriteRenderer;
 
     void Start(){
         
