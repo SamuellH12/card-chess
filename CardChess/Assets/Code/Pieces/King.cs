@@ -8,16 +8,25 @@ public class King : Piece {
         List<Cell> moves = base.ListOfMoves(board);
         List<Cell> prohibitedMoves = new List<Cell>();
 
+        Debug.Log("King possible moves count: " + moves.Count);
+
         foreach(Piece piece in board.pieces){
             if(piece.player != this.player){
-                List<Cell> attackCells = piece.ListOfAttacks(board);
-                prohibitedMoves.AddRange(attackCells);
+                prohibitedMoves.AddRange(piece.ListOfAttacks(board, true));
             }
         }
         
+        Debug.Log("King prohibited moves count: " + prohibitedMoves.Count);
+
         // remove prohibited moves
         moves.RemoveAll(cell => prohibitedMoves.Contains(cell));
+        
         return moves;
+    }
+
+    public override List<Cell> ListOfAttacks(Board board, bool couldAtack = false){
+        if(couldAtack) return base.ListOfMoves(board);
+        return ListOfMoves(board);
     }
 
     // test if king is on check

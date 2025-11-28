@@ -26,6 +26,8 @@ public class Piece : MonoBehaviour
         if(cell) cell.piece = null;
         hasMoved = true;
 
+        if(newCell.piece != null) CapturePiece(newCell.piece);
+
         cell = newCell;
         cell.piece = this;
 
@@ -33,6 +35,12 @@ public class Piece : MonoBehaviour
 
         // call manager to handle evolution
         if(CanEvolve()) cell.board.globalManager.HandleEvolution(this);
+    }
+
+    public void CapturePiece(Piece targetPiece){
+        Board board = targetPiece.cell.board;
+        board.pieces.Remove(targetPiece);
+        Destroy(targetPiece.gameObject);
     }
 
     // search for possible moves in the board
@@ -49,7 +57,7 @@ public class Piece : MonoBehaviour
                 int nx = x + dx;
                 int ny = y + dy;
 
-                if(nx >= 0 && nx < board.H && ny >= 0 && ny < board.W){
+                if(board.IsInsideBoard(nx, ny) && (board.cells[nx, ny].piece == null || board.cells[nx, ny].piece.player != player)){
                     moves.Add(board.cells[nx, ny]);
                 }
             }
@@ -59,7 +67,7 @@ public class Piece : MonoBehaviour
     }
 
     // list only the cells that can be attacked by this piece
-    public virtual List<Cell> ListOfAttacks(Board board){
+    public virtual List<Cell> ListOfAttacks(Board board, bool couldAtack = false){
         return ListOfMoves(board);
     }
 

@@ -27,7 +27,7 @@ public class Pawn : Piece
         return moves;
     }
 
-    public override List<Cell> ListOfAttacks(Board board)
+    public override List<Cell> ListOfAttacks(Board board, bool couldAtack = false)
     {
         List<Cell> attacks = new List<Cell>();
         int direction = (player == 0) ? 1 : -1; // direction based on player
@@ -43,7 +43,7 @@ public class Pawn : Piece
             if (nx >= 0 && nx < board.H && ny >= 0 && ny < board.W)
             {
                 Cell targetCell = board.cells[nx, ny];
-                if (targetCell.piece != null && targetCell.piece.player != player)
+                if((targetCell.piece != null && targetCell.piece.player != player) || couldAtack)
                 {
                     attacks.Add(targetCell);
                 }
