@@ -1,4 +1,4 @@
-#Mecânicas e Cartas de ação
+# Mecânicas e Cartas de ação
 
 - Névoa: os jogarores só vêm suas peças e as áreas de ataque dessas.
 - Congele a rainha inimiga por 3 turnos

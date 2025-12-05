@@ -4,29 +4,14 @@ using System.Collections.Generic;
 public class GlobalManager : MonoBehaviour{
     
     public Board board = null;
+    [HideInInspector]
+    public CardManager cardManager = null;
     int turn = 0, turnCount = 0;
-    int cardsGotThisTurn = 0;
-
-    private Cell selectedCell = null;
-    private List<Cell> highlightedCells = new List<Cell>();
-    
-    // stack of cards
-    public List<Card> cardDeck = new List<Card>();
-    public List<Card>[] playerHands = new List<Card>[2];
-    public List<Card> discardPile = new List<Card>();
 
     void Start(){
+        cardManager = GetComponent<CardManager>(); // same object as card manager
         board.globalManager = this;
         turn = 0;
-        
-        // def every card board
-        foreach(Card card in cardDeck) card.board = board;
-
-        playerHands[0] = new List<Card>();
-        playerHands[1] = new List<Card>();
-
-        foreach(Card card in playerHands[0]) card.board = board;
-        foreach(Card card in playerHands[1]) card.board = board;
     }
 
     void Update(){ }
@@ -34,29 +19,31 @@ public class GlobalManager : MonoBehaviour{
     public void NextTurn(){ //reset turn variables
         turn ^= 1; // switch turn
         turnCount += 1;
-        cardsGotThisTurn = 0;
+        cardManager.NextTurn();
     }
 
     private Card selectedCard = null;
+    private Cell selectedCell = null;
+
     public void ClickedCard(Card card){
-        if(cardDeck.Contains(card)){
-            if(cardsGotThisTurn >= 1) return; // only 1 card per turn
-            AddCardToHand(card, turn);
+        if(cardManager.cardDeck.Contains(card)){
+            cardManager.AddCardToHand(card, turn);
             return;
         }
-        if(!playerHands[turn].Contains(card)) return;
+        if(!cardManager.playerHands[turn].Contains(card)) return;
         
         selectedCard = card;
-        ClearHighlights();
+        board.ClearHighlights();
         
         if(card.cardType == 0){ // Piece card
+            List<Cell> highlightedCells = new List<Cell>();
             foreach(Cell cell in board.GetEmptyCells()){ // if cell is empty and is the first or second row for the player
                 if((turn == 0 && cell.y <= 1) || (turn == 1 && cell.y >= board.H - 2)){
                     highlightedCells.Add(cell);
-                    cell.HighlightCell();
                 }
             }
             if(highlightedCells.Count == 0) selectedCard = null; // no valid cells
+            else board.AddHighlights(highlightedCells);
         }
 
     }
@@ -66,33 +53,23 @@ public class GlobalManager : MonoBehaviour{
         // select this cell
         if(selectedCell == null && selectedCard == null){
             selectedCell = cell;
-            AddHighlight(cell);
+            board.AddHighlight(cell, turn);
             return;
         }
 
         // deselect
         if(selectedCell == cell && selectedCard == null){
-            ClearHighlights();
+            board.ClearHighlights();
             selectedCell = null;
             return;
         }
 
         // if clicked cell is highlighted, move piece
-        if(highlightedCells.Contains(cell)){
+        if(board.IsCellHighlighted(cell)){
 
             if(selectedCard){
-
-                if(selectedCard.cardType == 0){ // Piece card
-                    PieceCard pieceCard = (PieceCard)selectedCard;
-                    pieceCard.SummonPiece(cell, turn);
-
-                    // remove card from hand
-                    discardPile.Add(selectedCard);
-                    playerHands[turn].Remove(selectedCard);
-                    Destroy(selectedCard.gameObject);
-                }
-                
-                ClearHighlights();
+                cardManager.UseCard(selectedCard, turn, cell);
+                board.ClearHighlights();
                 selectedCell = null;
                 selectedCard = null;
                 return;
@@ -103,7 +80,7 @@ public class GlobalManager : MonoBehaviour{
 
                 if(piece) piece.MoveToCell(cell);
 
-                ClearHighlights();
+                board.ClearHighlights();
                 selectedCell = null;
                 NextTurn();
             }
@@ -112,32 +89,8 @@ public class GlobalManager : MonoBehaviour{
         }
 
         // clicked cell is not highlighted, clear selection
-        ClearHighlights();
+        board.ClearHighlights();
         selectedCell = null;
-    }
-
-    void AddHighlight(Cell cell){
-        Debug.Log("Highlighting cell " + cell.x + "," + cell.y);
-        ClearHighlights();
-        
-        highlightedCells.Add(cell);
-        cell.HighlightCell();
-
-        if(cell.piece == null || cell.piece.player != turn ) return;
-
-        List<Cell> moves = cell.piece.ListOfMoves(board);
-        moves.AddRange(cell.piece.ListOfAttacks(board)); // add atacks as well
-        moves = new List<Cell>(new HashSet<Cell>(moves)); // unique
-
-        foreach(Cell move in moves){
-            highlightedCells.Add(move);
-            move.HighlightCell();
-        }
-    }
-
-    void ClearHighlights(){
-        foreach(Cell cell in highlightedCells) cell.ClearHighlight();
-        highlightedCells.Clear();
     }
 
     public void HandleEvolution(Piece piece){
@@ -162,11 +115,4 @@ public class GlobalManager : MonoBehaviour{
 
         Debug.Log("Piece evolved for player " + newPiece.player + " at cell " + newPiece.cell.x + "," + newPiece.cell.y);
     }
-
-    public void AddCardToHand(Card card, int player){
-        playerHands[player].Add(card);
-        cardDeck.Remove(card);
-        cardsGotThisTurn += 1;
-    }
-
 }

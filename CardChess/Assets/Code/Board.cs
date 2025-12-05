@@ -73,7 +73,7 @@ public class Board : MonoBehaviour {
         return true;
     }
 
-    void RecreateBoard(){
+    public void RecreateBoard(){
         cells = new Cell[H,W];
 
         // create new cells
@@ -115,5 +115,44 @@ public class Board : MonoBehaviour {
             }
         }
         return emptyCells;
+    }
+
+    private List<Cell> highlightedCells = new List<Cell>();
+
+    public void AddHighlight(Cell cell, int player){
+        Debug.Log("Highlighting cell " + cell.x + "," + cell.y);
+        ClearHighlights();
+        
+        highlightedCells.Add(cell);
+        cell.HighlightCell();
+
+        if(cell.piece == null || cell.piece.player != player ) return;
+
+        List<Cell> moves = cell.piece.ListOfMoves(this);
+        moves.AddRange(cell.piece.ListOfAttacks(this)); // add atacks as well
+        moves = new List<Cell>(new HashSet<Cell>(moves)); // unique
+
+        foreach(Cell move in moves){
+            highlightedCells.Add(move);
+            move.HighlightCell();
+        }
+    }
+
+    public void AddHighlights(List<Cell> cellsToHighlight){
+        ClearHighlights();
+        
+        foreach(Cell cell in cellsToHighlight){
+            highlightedCells.Add(cell);
+            cell.HighlightCell();
+        }
+    }
+
+    public void ClearHighlights(){
+        foreach(Cell cell in highlightedCells) cell.ClearHighlight();
+        highlightedCells.Clear();
+    }
+
+    public bool IsCellHighlighted(Cell cell){
+        return highlightedCells.Contains(cell);
     }
 }
