@@ -13,7 +13,7 @@ public class Piece : MonoBehaviour
     void Start(){
         // change color based on player
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = player == 0 ? Color.white : Color.black;
+        ResetColor();
     }
 
     void Update(){
@@ -73,5 +73,9 @@ public class Piece : MonoBehaviour
 
     public virtual bool CanEvolve(){
         return false;
+    }
+
+    public void ResetColor(){
+        spriteRenderer.color = player == 0 ? Color.white : Color.black;
     }
 }

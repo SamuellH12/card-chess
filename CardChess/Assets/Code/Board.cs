@@ -104,4 +104,16 @@ public class Board : MonoBehaviour {
     }
 
     public bool IsInsideBoard(int x, int y){ return x >= 0 && x < H && y >= 0 && y < W; }
+
+    // get empty cells
+    public List<Cell> GetEmptyCells(){
+        List<Cell> emptyCells = new List<Cell>();
+        for(int i=0; i<H; i++){
+            for(int j=0; j<W; j++){
+                if(cells[i,j].piece == null) 
+                    emptyCells.Add(cells[i,j]);
+            }
+        }
+        return emptyCells;
+    }
 }
