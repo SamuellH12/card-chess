@@ -7,6 +7,12 @@ public class CardManager : MonoBehaviour {
     [HideInInspector]
     public GlobalManager globalManager = null;
 
+    public int maxCardsInDeck = 4;
+    public int maxCardsPerRowInDeck = 2;
+    public GameObject deckArea;
+    public List<GameObject> handAreas = new List<GameObject>();
+    public List<int> maxCardsInHandPerPlayer = new List<int>(){5,5};
+
     // stack of cards
     public List<Card> cardDeck = new List<Card>();
     public List<Card>[] playerHands = new List<Card>[2];
@@ -19,14 +25,42 @@ public class CardManager : MonoBehaviour {
         globalManager = GetComponent<GlobalManager>();
         board = globalManager.board;
 
-        // def every card board
-        foreach(Card card in cardDeck) card.board = board;
+        if(handAreas.Count < 2){
+            // create hand areas
+            for(int i = handAreas.Count; i < 2; i++){
+                GameObject handArea = new GameObject("Player" + i + "HandArea");
+                handArea.transform.parent = this.transform;
+                handAreas.Add(handArea);
+            }
+        }
+
+        // seek over deckArea if has cards in children and add to cardDeck
+        cardDeck.AddRange(deckArea.GetComponentsInChildren<Card>(true));
+        // check if is not null
+
+        // remove null cards
+        cardDeck.RemoveAll(card => card == null);
+        // remove duplicates
+        HashSet<Card> uniqueCards = new HashSet<Card>(cardDeck);
+        cardDeck = new List<Card>(uniqueCards);
+        Debug.Log("Deck has " + cardDeck.Count + " unique cards after removing nulls and duplicates.");
+
+        foreach(Card card in cardDeck){
+            if(card == null) Debug.LogError("Card in deck is null!");
+        }
 
         playerHands[0] = new List<Card>();
         playerHands[1] = new List<Card>();
 
+        // def every card board
+        foreach(Card card in cardDeck) card.board = board;
         foreach(Card card in playerHands[0]) card.board = board;
         foreach(Card card in playerHands[1]) card.board = board;
+
+        ShuffleDeck();
+        PlaceCardsInDeckArea();
+        PlaceCardsInHandArea(0);
+        PlaceCardsInHandArea(1);
     }
 
     void Update(){
@@ -40,19 +74,83 @@ public class CardManager : MonoBehaviour {
             // remove card from hand
             discardPile.Add(card);
             playerHands[player].Remove(card);
-            Destroy(card.gameObject);
+            card.gameObject.SetActive(false);
         }
     }
     
-    public void AddCardToHand(Card card, int player){
-        if(cardsGotThisTurn >= MaxCardsPerTurn) return;
+    public bool AddCardToHand(Card card, int player){
+        if(cardsGotThisTurn >= MaxCardsPerTurn) return false;
+        if(playerHands[player].Count >= maxCardsInHandPerPlayer[player]) return false;
 
         playerHands[player].Add(card);
         cardDeck.Remove(card);
         cardsGotThisTurn += 1;
+
+        PlaceCardsInDeckArea();
+        PlaceCardsInHandArea(player);
+        return true;
     }
 
     public void NextTurn(){ //reset turn variables
         cardsGotThisTurn = 0;
+    }
+
+    public void ShuffleDeck(){
+        for (int i = 0; i < cardDeck.Count; i++){
+            Card temp = cardDeck[i];
+            int randomIndex = Random.Range(i, cardDeck.Count);
+            cardDeck[i] = cardDeck[randomIndex];
+            cardDeck[randomIndex] = temp;
+        }
+    }
+
+    public void PlaceCardsInDeckArea(){
+        float cardsSize = 0;
+        float cardHeight = 0;
+        if(cardDeck.Count > 0){
+            cardsSize = cardDeck[0].GetComponent<SpriteRenderer>().bounds.size.x;
+            cardHeight = cardDeck[0].GetComponent<SpriteRenderer>().bounds.size.y;
+        }
+        foreach(Card card in cardDeck) card.gameObject.SetActive(false);
+
+        Vector3 cardPos = deckArea.transform.position;
+        int addedCards = 0;
+        foreach(Card card in cardDeck){
+            card.gameObject.SetActive(true);
+            card.transform.parent = deckArea.transform;
+            card.transform.position = cardPos;
+            cardPos.x += cardsSize * 1.1f;
+            
+            addedCards += 1;
+            if(addedCards >= maxCardsInDeck) break;
+            if(addedCards % maxCardsPerRowInDeck == 0){
+                cardPos.x = deckArea.transform.position.x;
+                cardPos.y -= cardHeight * 1.1f;
+            }
+        }
+    }
+
+    public void PlaceCardsInHandArea(int player){
+        float cardsSize = 0;
+        float cardHeight = 0;
+        if(cardDeck.Count > 0){
+            cardsSize = cardDeck[0].GetComponent<SpriteRenderer>().bounds.size.x;
+            cardHeight = cardDeck[0].GetComponent<SpriteRenderer>().bounds.size.y;
+        }
+
+        Vector3 cardPos = handAreas[player].transform.position;
+        int addedCards = 0;
+        foreach(Card card in playerHands[player]){
+            card.transform.parent = handAreas[player].transform;
+            card.transform.position = cardPos;
+            cardPos.x += cardsSize * 1.1f;
+            
+            addedCards += 1;
+            if(addedCards % maxCardsPerRowInDeck == 0){
+                cardPos.x = deckArea.transform.position.x;
+                cardPos.y -= cardHeight * 1.1f;
+            }
+        }
+
     }
 }

@@ -53,4 +53,9 @@ public class Cell : MonoBehaviour {
     public void ClearHighlight(){
         highlightImage.enabled = false;
     }
+
+    public bool IsEmpty(){ return piece == null; }
+    public bool HasPiece(){ return piece != null; }
+    public bool HasEnemyPiece(int player){ return piece != null && piece.player != player; }
+    public bool EmptyOrEnemy(int player){ return piece == null || piece.player != player; }
 }

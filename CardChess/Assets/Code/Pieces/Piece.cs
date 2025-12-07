@@ -31,7 +31,9 @@ public class Piece : MonoBehaviour
         cell = newCell;
         cell.piece = this;
 
-        transform.position = new Vector3(newCell.x, newCell.y, 0);
+        // change to same scale as cell
+        transform.position = cell.transform.position;
+        transform.localScale = cell.transform.localScale;
 
         // call manager to handle evolution
         if(CanEvolve()) cell.board.globalManager.HandleEvolution(this);

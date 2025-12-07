@@ -17,11 +17,10 @@ public class Knight : Piece
         for(int i = 0; i < knightMoves.GetLength(0); i++){
             int nx = x + knightMoves[i, 0];
             int ny = y + knightMoves[i, 1];
-
-            if(nx >= 0 && nx < board.H && ny >= 0 && ny < board.W){
+            
+            if(board.IsInsideBoard(nx, ny)){
                 Cell targetCell = board.cells[nx, ny];
-                if(targetCell.piece == null || targetCell.piece.player != player) 
-                    moves.Add(targetCell);
+                if(targetCell.EmptyOrEnemy(player))  moves.Add(targetCell);
             }
         }
 

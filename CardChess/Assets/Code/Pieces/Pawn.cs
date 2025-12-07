@@ -43,7 +43,7 @@ public class Pawn : Piece
             if (nx >= 0 && nx < board.H && ny >= 0 && ny < board.W)
             {
                 Cell targetCell = board.cells[nx, ny];
-                if((targetCell.piece != null && targetCell.piece.player != player) || couldAtack)
+                if((targetCell.HasPiece() && targetCell.piece.player != player) || couldAtack)
                 {
                     attacks.Add(targetCell);
                 }

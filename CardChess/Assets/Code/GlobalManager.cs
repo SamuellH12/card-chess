@@ -26,6 +26,11 @@ public class GlobalManager : MonoBehaviour{
     private Cell selectedCell = null;
 
     public void ClickedCard(Card card){
+        if(selectedCard == card){
+            selectedCard = null;
+            board.ClearHighlights();
+            return;
+        }
         if(cardManager.cardDeck.Contains(card)){
             cardManager.AddCardToHand(card, turn);
             return;
@@ -91,6 +96,7 @@ public class GlobalManager : MonoBehaviour{
         // clicked cell is not highlighted, clear selection
         board.ClearHighlights();
         selectedCell = null;
+        selectedCard = null;
     }
 
     public void HandleEvolution(Piece piece){

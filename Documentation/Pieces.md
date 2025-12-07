@@ -48,14 +48,14 @@ Só se move pra frente e só ataca na diagonal (pra frente). No primeiro movimen
 ### Alcance longo
 
 #### Arqueiro
-Só se move para frente, mas captura em qualquer diagonal para frente.
-Ao chegar ao fim do tabuleiro vira bispo.
+Só se move para casas adjacentes, mas captura em qualquer diagonal para frente, podendo pular até uma peça.
+Ao chegar ao fim do tabuleiro pode virar bispo ou continuar como arqueiro.
 
 ```
     . . . . . # .
-    . . . . # . .
-    . . . A + . .
-    . . . . # . .
+    . . . + # . .
+    . . + A + . .
+    . . . + # . .
     . . . . . # .
 ```
 
@@ -82,6 +82,30 @@ Pode andar para qualquer peça num distância de manhatan de até 2 blocos (não
     . . . # . . . .  
 ```
 
+#### Serpente
+Pode pular peças
+
+```
+    . . . # . . . .  
+    . # . . . # . .  
+    . . # S # . . .  
+    . # . . . # . .  
+    . . . # . . . .  
+```
+
+#### Monge ?
+
+```
+    . . . . . . .
+    . . . . . . .
+    . . . M . . .
+    . . . . . . .
+    . . . . . . .
+```
+
+#### Mímico
+Se move como peão no começo e depois se move como a última peça que capturou.
+
 #### Príncipe
 Se move como o rei.
 ```
@@ -97,12 +121,12 @@ Ao chegar ao fim do tabuleiro pode virar bispo, torre, cavalo, rainha ou rei:
 
 #### Escudo
 
-Ao chegar ao fim do tabuleiro pode virar torre.
+Ao chegar ao fim do tabuleiro pode virar elefante ou torre.
 ```
     . . . . .
-    . . # . .
+    . # # . .
     . S # . .
-    . . # . .
+    . # # . .
     . . . . .
 ```
 

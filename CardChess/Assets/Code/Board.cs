@@ -42,15 +42,29 @@ public class Board : MonoBehaviour {
         bool kingWhiteExists = false;
         bool kingBlackExists = false;
         foreach(InitialPiece ip in initialPieces){
+            ip.x = (ip.x + H) % H;
+            ip.y = (ip.y + W) % W;
             AddPiece(ip.prefab, ip.x, ip.y, ip.player);
             if(ip.prefab == kingPrefab){
                 if(ip.player == 0) kingWhiteExists = true;
                 if(ip.player == 1) kingBlackExists = true;
             }
         }
+        
+        // seek over chieldren of board for pieces as well
+        foreach(Transform child in transform){
+            Piece piece = child.GetComponent<Piece>(); // Piece or derived class
+            if(piece != null){
+                AddPiece(piece, (int)piece.transform.position.x, (int)piece.transform.position.y, piece.player);
+                if(piece.pieceType == "King"){
+                    if(piece.player == 0) kingWhiteExists = true;
+                    if(piece.player == 1) kingBlackExists = true;
+                }
+            }
+        }
 
         if(!kingWhiteExists) AddPiece(kingPrefab, 4, 0, 0);
-        if(!kingBlackExists) AddPiece(kingPrefab, 4, 7, 1);
+        if(!kingBlackExists) AddPiece(kingPrefab, 4, H-1, 1);
     }
 
     // Update is called once per frame
@@ -65,6 +79,18 @@ public class Board : MonoBehaviour {
         pieceObj.transform.parent = this.transform;
 
         Piece piece = pieceObj.GetComponent<Piece>();
+        piece.player = player;
+        piece.MoveToCell(cells[x,y]);
+        piece.hasMoved = false;
+        pieces.Add(piece);
+
+        return true;
+    }
+
+    public bool AddPiece(Piece piece, int x, int y, int player){
+        if(x < 0 || x >= H || y < 0 || y >= W) return false;
+        if(cells[x,y].piece != null) return false;
+
         piece.player = player;
         piece.MoveToCell(cells[x,y]);
         piece.hasMoved = false;
@@ -101,6 +127,10 @@ public class Board : MonoBehaviour {
                 if(i == 0  ) cells[i,j].canEvolveBlack = true;
             }
         }
+
+        // resize board object
+        float newScale = Mathf.Min(8f/H, 8f/W);
+        transform.localScale = new Vector3(newScale, newScale, 1);
     }
 
     public bool IsInsideBoard(int x, int y){ return x >= 0 && x < H && y >= 0 && y < W; }
@@ -154,5 +184,10 @@ public class Board : MonoBehaviour {
 
     public bool IsCellHighlighted(Cell cell){
         return highlightedCells.Contains(cell);
+    }
+
+    public Cell GetCell(int x, int y){
+        if(!IsInsideBoard(x,y)) return null;
+        return cells[x,y];
     }
 }
