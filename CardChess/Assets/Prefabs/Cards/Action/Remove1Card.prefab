@@ -126,4 +126,4 @@ MonoBehaviour:
   cardImage: {fileID: 0}
   board: {fileID: 0}
   cardType: 0
-  amountToClear: -1
+  amountToClear: 1

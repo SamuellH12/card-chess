@@ -160,10 +160,9 @@ public class CardManager : MonoBehaviour {
             
             addedCards += 1;
             if(addedCards % maxCardsPerRowInDeck == 0){
-                cardPos.x = deckArea.transform.position.x;
+                cardPos.x = handAreas[player].transform.position.x;
                 cardPos.y -= cardHeight * 1.1f;
             }
         }
-
     }
 }
