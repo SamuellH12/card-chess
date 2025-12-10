@@ -30,17 +30,17 @@ public class King : Piece {
     }
 
     // test if king is on check
-    public bool OnCheck(){
+    public bool OnCheck(Cell testCell){
         Board board = this.cell.board;
         foreach(Piece piece in board.pieces){
             if(piece.player != this.player){
-                List<Cell> attackCells = piece.ListOfAttacks(board);
-                if(attackCells.Contains(this.cell)){
+                List<Cell> attackCells = piece.ListOfAttacks(board, true);
+                if(attackCells.Contains(testCell)) 
                     return true;
-                }
             }
         }
         return false;
     }
+    public bool OnCheck(){ return OnCheck(this.cell); }
     
 }

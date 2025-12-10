@@ -40,9 +40,7 @@ public class Piece : MonoBehaviour
     }
 
     public void CapturePiece(Piece targetPiece){
-        Board board = targetPiece.cell.board;
-        board.pieces.Remove(targetPiece);
-        Destroy(targetPiece.gameObject);
+        targetPiece.cell.board.RemovePiece(targetPiece);
     }
 
     // search for possible moves in the board

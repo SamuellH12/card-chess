@@ -38,18 +38,12 @@ public class GlobalManager : MonoBehaviour{
         if(!cardManager.playerHands[turn].Contains(card)) return;
         
         selectedCard = card;
-        board.ClearHighlights();
         
-        if(card.cardType == 0){ // Piece card
-            List<Cell> highlightedCells = card.GetHighlightedCells(turn);
-            if(highlightedCells.Count == 0) selectedCard = null; // no valid cells
-            else board.AddHighlights(highlightedCells);
-        }
-        if(card.cardType == 1){ // Evo card
-            List<Cell> highlightedCells = card.GetHighlightedCells(turn);
-            if(highlightedCells.Count == 0) selectedCard = null; // no valid cells
-            else board.AddHighlights(highlightedCells);
-        }
+        board.ClearHighlights();
+        List<Cell> highlightedCells = card.GetHighlightedCells(turn);
+        
+        if(highlightedCells.Count == 0) selectedCard = null; // no valid cells
+        else board.AddHighlights(highlightedCells);
     }
 
     public void ClickedCell(Cell cell){

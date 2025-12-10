@@ -66,19 +66,18 @@ public class CardManager : MonoBehaviour {
     void Update(){
     }
 
+    public void DiscardCard(Card card, int player){
+        if(playerHands[player].Contains(card)){
+            discardPile.Add(card);
+            playerHands[player].Remove(card);
+            card.gameObject.SetActive(false);
+            PlaceCardsInHandArea(player);
+        }
+    }
+
     public void UseCard(Card card, int player, Cell cell){
-        if(card.cardType == 0){ // Piece card
-            PieceCard pieceCard = (PieceCard)card;
-            pieceCard.SummonPiece(cell, player);
-        }
-        if(card.cardType == 1){ // Action card
-            EvoCard evoCard = (EvoCard)card;
-            globalManager.HandleEvolution(cell.piece);
-        }
-        // remove card from hand
-        discardPile.Add(card);
-        playerHands[player].Remove(card);
-        card.gameObject.SetActive(false);
+        card.UseCard(player, cell, this);
+        DiscardCard(card, player);
     }
     
     public bool AddCardToHand(Card card, int player){
@@ -92,6 +91,17 @@ public class CardManager : MonoBehaviour {
         PlaceCardsInDeckArea();
         PlaceCardsInHandArea(player);
         return true;
+    }
+
+    public void RemoveFromHand(int player, int amountToClear = -1){
+        if(amountToClear == -1) amountToClear = playerHands[player].Count;
+        else amountToClear = Mathf.Min(amountToClear, playerHands[player].Count);
+        // random list of cards to remove from hand
+        for(int i = 0; i < amountToClear; i++){
+            int randomIndex = Random.Range(0, playerHands[player].Count);
+            Card cardToRemove = playerHands[player][randomIndex];
+            DiscardCard(cardToRemove, player);
+        }
     }
 
     public void NextTurn(){ //reset turn variables

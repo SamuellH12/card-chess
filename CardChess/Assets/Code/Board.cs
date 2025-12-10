@@ -106,6 +106,14 @@ public class Board : MonoBehaviour {
         return true;
     }
 
+    public void RemovePiece(Piece piece){
+        if(pieces.Contains(piece)){
+            pieces.Remove(piece);
+            piece.cell.piece = null;
+            Destroy(piece.gameObject); 
+        }
+    }
+
     public void RecreateBoard(){
         cells = new Cell[H,W];
 
@@ -157,7 +165,6 @@ public class Board : MonoBehaviour {
     private List<Cell> highlightedCells = new List<Cell>();
 
     public void AddHighlight(Cell cell, int player){
-        Debug.Log("Highlighting cell " + cell.x + "," + cell.y);
         ClearHighlights();
         
         highlightedCells.Add(cell);
@@ -196,5 +203,12 @@ public class Board : MonoBehaviour {
     public Cell GetCell(int x, int y){
         if(!IsInsideBoard(x,y)) return null;
         return cells[x,y];
+    }
+
+    public Piece GetKing(int player){
+        foreach(Piece piece in pieces)
+            if(piece.player == player && piece.pieceType == "King")
+                return piece;
+        return null;
     }
 }

@@ -26,4 +26,8 @@ public class PieceCard : Card
         }
         return highlightedCells;
     }
+
+    public override void UseCard(int player, Cell cell, CardManager cardManager){
+        SummonPiece(cell, player);
+    }
 }

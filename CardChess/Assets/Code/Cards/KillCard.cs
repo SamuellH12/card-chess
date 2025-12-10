@@ -1,24 +1,28 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class EvoCard : Card {
+// clear all enemy cards from hand
+public class KillCard : Card {
     
     void Start(){
-        cardType = 1; // Action card
+        cardType = 3; // Action card
     }
 
     public override List<Cell> GetHighlightedCells(int player){
-        // search in board for pieces of the player that can evolve
         List<Cell> highlightedCells = new List<Cell>();
+
+        // get cells where enemy pieces are located except kings
+        int enemyPlayer = 1 - player;
         foreach(Piece piece in board.pieces){
-            if(piece.player == player && piece.CouldEvolve()){
+            if(piece.player == enemyPlayer && piece.pieceType != "King"){
                 highlightedCells.Add(piece.cell);
             }
         }
+        
         return highlightedCells;
     }
 
     public override void UseCard(int player, Cell cell, CardManager cardManager){
-        cardManager.globalManager.HandleEvolution(cell.piece);
+        board.RemovePiece(cell.piece);
     }
 }
