@@ -11,8 +11,15 @@ public class Lancer : Piece
         int x = cell.x;
         int y = cell.y;
         int ny = y + direction;
+        int nny = y + 2 * direction;
+        int nnny = y + 3 * direction;
 
         if(board.IsInsideBoard(x, ny)) moves.Add(board.GetCell(x, ny));
+        
+        if(hasMoved == false && board.IsInsideBoard(x, nny)){ // primeiro movimento pode avançar 2
+            if(board.GetCell(x, nny).EmptyOrEnemy(player))
+                moves.Add(board.GetCell(x, nny));
+        }
 
         return moves;
     }
@@ -25,6 +32,7 @@ public class Lancer : Piece
         int y = cell.y;
         int ny = y + direction;
         int nny = y + 2 * direction;
+        int nnny = y + 3 * direction;
 
         if(board.IsInsideBoard(x,  ny)) attacks.Add(board.GetCell(x,  ny));
         if(board.IsInsideBoard(x, nny)){

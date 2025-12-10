@@ -53,18 +53,23 @@ public class Board : MonoBehaviour {
         
         // seek over chieldren of board for pieces as well
         foreach(Transform child in transform){
-            Piece piece = child.GetComponent<Piece>(); // Piece or derived class
-            if(piece != null){
-                AddPiece(piece, (int)piece.transform.position.x, (int)piece.transform.position.y, piece.player);
-                if(piece.pieceType == "King"){
-                    if(piece.player == 0) kingWhiteExists = true;
-                    if(piece.player == 1) kingBlackExists = true;
+            foreach(Transform grandChild in child){
+                Piece grandPiece = grandChild.GetComponent<Piece>();
+                if(grandPiece != null){
+                    AddPiece(grandPiece, (int)grandPiece.transform.position.x, (int)grandPiece.transform.position.y, grandPiece.player);
+                    Debug.Log("Found piece on board: " + grandPiece.pieceType + " at " + grandPiece.transform.position.x + "," + grandPiece.transform.position.y);
+                    if(grandPiece.pieceType == "King"){
+                        if(grandPiece.player == 0) kingWhiteExists = true;
+                        if(grandPiece.player == 1) kingBlackExists = true;
+                    }
                 }
             }
         }
 
         if(!kingWhiteExists) AddPiece(kingPrefab, 4, 0, 0);
         if(!kingBlackExists) AddPiece(kingPrefab, 4, H-1, 1);
+
+        RescaleBoard();
     }
 
     // Update is called once per frame
@@ -88,7 +93,9 @@ public class Board : MonoBehaviour {
     }
 
     public bool AddPiece(Piece piece, int x, int y, int player){
-        if(x < 0 || x >= H || y < 0 || y >= W) return false;
+        // if(x < 0 || x >= H || y < 0 || y >= W) return false;
+        x = (x + H) % H;
+        y = (y + W) % W;
         if(cells[x,y].piece != null) return false;
 
         piece.player = player;
@@ -127,8 +134,8 @@ public class Board : MonoBehaviour {
                 if(i == 0  ) cells[i,j].canEvolveBlack = true;
             }
         }
-
-        // resize board object
+    }
+    public void RescaleBoard(){
         float newScale = Mathf.Min(8f/H, 8f/W);
         transform.localScale = new Vector3(newScale, newScale, 1);
     }
