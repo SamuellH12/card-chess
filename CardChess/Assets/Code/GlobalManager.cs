@@ -6,6 +6,7 @@ public class GlobalManager : MonoBehaviour{
     public Board board = null;
     [HideInInspector]
     public CardManager cardManager = null;
+    public SpriteRenderer turnIndicator = null;
     int turn = 0, turnCount = 0;
 
     void Start(){
@@ -20,6 +21,7 @@ public class GlobalManager : MonoBehaviour{
         turn ^= 1; // switch turn
         turnCount += 1;
         cardManager.NextTurn();
+        if(turnIndicator) turnIndicator.color = turn == 0 ? Color.white : Color.gray;
     }
 
     public void ActionComplete(int actionsUsed=-1){

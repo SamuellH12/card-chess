@@ -176,6 +176,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2cc1fd44299573489a5ef5a43f68a21, type: 3}
+--- !u!4 &7908690 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+  m_PrefabInstance: {fileID: 2013610472}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &14796107
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlobalManager
   board: {fileID: 1234805380}
   cardManager: {fileID: 0}
+  turnIndicator: {fileID: 0}
 --- !u!4 &26036230
 Transform:
   m_ObjectHideFlags: 0
@@ -795,6 +801,7 @@ Transform:
   - {fileID: 502141374}
   - {fileID: 715582398}
   - {fileID: 14796108}
+  - {fileID: 7908690}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &131072057 stripped
@@ -5013,6 +5020,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4244934447715461199, guid: 39a279720bc657645944d155ffdf3bd3, type: 3}
   m_PrefabInstance: {fileID: 2000607175}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2013610472
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 125539931}
+    m_Modifications:
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 516452633701261636, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686526854812272296, guid: c19a760c92a24574b9bca536c424c764, type: 3}
+      propertyPath: m_Name
+      value: TurnIndicator
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c19a760c92a24574b9bca536c424c764, type: 3}
 --- !u!4 &2049731655 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4244934447715461199, guid: bcf2030826c0e1543b65936ce0480312, type: 3}
