@@ -22,6 +22,10 @@ public class GlobalManager : MonoBehaviour{
         cardManager.NextTurn();
     }
 
+    public void ActionComplete(int actionsUsed=-1){
+        NextTurn();
+    }
+
     private Card selectedCard = null;
     private Cell selectedCell = null;
 
@@ -32,7 +36,8 @@ public class GlobalManager : MonoBehaviour{
             return;
         }
         if(cardManager.cardDeck.Contains(card)){
-            cardManager.AddCardToHand(card, turn);
+            if(cardManager.AddCardToHand(card, turn))
+                ActionComplete(3);
             return;
         }
         if(!cardManager.playerHands[turn].Contains(card)) return;
@@ -70,6 +75,7 @@ public class GlobalManager : MonoBehaviour{
                 board.ClearHighlights();
                 selectedCell = null;
                 selectedCard = null;
+                ActionComplete(2);
                 return;
             }
 
@@ -80,7 +86,7 @@ public class GlobalManager : MonoBehaviour{
 
                 board.ClearHighlights();
                 selectedCell = null;
-                NextTurn();
+                ActionComplete(1);
             }
 
             return;
