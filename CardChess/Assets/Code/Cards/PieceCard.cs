@@ -16,4 +16,14 @@ public class PieceCard : Card
     public void SummonPiece(Cell cell, int player){
         board.AddPiece(piecePrefab, cell.x, cell.y, player);
     }
+
+    public override List<Cell> GetHighlightedCells(int player){
+        List<Cell> highlightedCells = new List<Cell>();
+        foreach(Cell cell in board.GetEmptyCells()){ // if cell is empty and is the first or second row for the player
+            if((player == 0 && cell.y <= 1) || (player == 1 && cell.y >= board.H - 2)){
+                highlightedCells.Add(cell);
+            }
+        }
+        return highlightedCells;
+    }
 }

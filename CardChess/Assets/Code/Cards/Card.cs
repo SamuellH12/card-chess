@@ -26,6 +26,10 @@ public class Card : MonoBehaviour {
             }
         }
     }
+
+    public virtual List<Cell> GetHighlightedCells(int player){
+        return new List<Cell>();
+    }
 }
 
 /*

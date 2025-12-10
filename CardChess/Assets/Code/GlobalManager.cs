@@ -41,16 +41,15 @@ public class GlobalManager : MonoBehaviour{
         board.ClearHighlights();
         
         if(card.cardType == 0){ // Piece card
-            List<Cell> highlightedCells = new List<Cell>();
-            foreach(Cell cell in board.GetEmptyCells()){ // if cell is empty and is the first or second row for the player
-                if((turn == 0 && cell.y <= 1) || (turn == 1 && cell.y >= board.H - 2)){
-                    highlightedCells.Add(cell);
-                }
-            }
+            List<Cell> highlightedCells = card.GetHighlightedCells(turn);
             if(highlightedCells.Count == 0) selectedCard = null; // no valid cells
             else board.AddHighlights(highlightedCells);
         }
-
+        if(card.cardType == 1){ // Evo card
+            List<Cell> highlightedCells = card.GetHighlightedCells(turn);
+            if(highlightedCells.Count == 0) selectedCard = null; // no valid cells
+            else board.AddHighlights(highlightedCells);
+        }
     }
 
     public void ClickedCell(Cell cell){
@@ -100,6 +99,8 @@ public class GlobalManager : MonoBehaviour{
     }
 
     public void HandleEvolution(Piece piece){
+        Debug.Log("Handling evolution for piece at " + piece.pieceType);
+        Debug.Log("Evolutions available: " + piece.evolutions.Count);
         if(piece.evolutions.Count == 0) return;
 
         // for simplicity, just evolve to the first option

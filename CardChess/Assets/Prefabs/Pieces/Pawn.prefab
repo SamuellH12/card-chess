@@ -107,5 +107,9 @@ MonoBehaviour:
   player: 0
   pieceType: Pawn
   spriteRenderer: {fileID: 0}
-  evolutions: []
+  evolutions:
+  - {fileID: 885008680146191912, guid: 29ac8c299175e554a995c3b4e54f5ee9, type: 3}
+  - {fileID: 4974502831573732512, guid: 7ad61920021b15b4196ddddff6c58dd6, type: 3}
+  - {fileID: 1959961295350490155, guid: 5c380f11aec424641bb6dc9a07f71a23, type: 3}
+  - {fileID: 7531932958482071091, guid: be30ec110e21de44083d8c01019f02ad, type: 3}
   hasMoved: 0

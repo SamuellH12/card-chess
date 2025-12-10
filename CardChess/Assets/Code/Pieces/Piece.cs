@@ -76,6 +76,8 @@ public class Piece : MonoBehaviour
     public virtual bool CanEvolve(){
         return false;
     }
+    
+    public bool CouldEvolve(){ return evolutions.Count > 0; }
 
     public void ResetColor(){
         spriteRenderer.color = player == 0 ? Color.white : Color.black;

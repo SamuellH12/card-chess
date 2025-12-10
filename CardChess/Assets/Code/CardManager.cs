@@ -70,12 +70,15 @@ public class CardManager : MonoBehaviour {
         if(card.cardType == 0){ // Piece card
             PieceCard pieceCard = (PieceCard)card;
             pieceCard.SummonPiece(cell, player);
-
-            // remove card from hand
-            discardPile.Add(card);
-            playerHands[player].Remove(card);
-            card.gameObject.SetActive(false);
         }
+        if(card.cardType == 1){ // Action card
+            EvoCard evoCard = (EvoCard)card;
+            globalManager.HandleEvolution(cell.piece);
+        }
+        // remove card from hand
+        discardPile.Add(card);
+        playerHands[player].Remove(card);
+        card.gameObject.SetActive(false);
     }
     
     public bool AddCardToHand(Card card, int player){
