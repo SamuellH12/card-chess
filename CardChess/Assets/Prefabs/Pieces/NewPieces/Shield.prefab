@@ -111,3 +111,5 @@ MonoBehaviour:
   - {fileID: 5515136159314761840, guid: fbf8a70e7138cb946b2688986afa3dd7, type: 3}
   - {fileID: 4974502831573732512, guid: 7ad61920021b15b4196ddddff6c58dd6, type: 3}
   hasMoved: 0
+  whiteColor: {r: 1, g: 1, b: 1, a: 1}
+  blackColor: {r: 0.42352942, g: 0.30588236, b: 0.41960785, a: 1}

@@ -109,3 +109,5 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7189992354955600419}
   evolutions: []
   hasMoved: 0
+  whiteColor: {r: 1, g: 1, b: 1, a: 1}
+  blackColor: {r: 0.42352942, g: 0.30588236, b: 0.41960785, a: 1}

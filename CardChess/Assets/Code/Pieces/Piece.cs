@@ -9,6 +9,8 @@ public class Piece : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public List<GameObject> evolutions = new List<GameObject>();
     public bool hasMoved = false;
+    public Color whiteColor = Color.white;
+    public Color blackColor = new Color(0.42f, 0.32f, 0.43f);
 
     void Start(){
         // change color based on player
@@ -78,6 +80,6 @@ public class Piece : MonoBehaviour
     public bool CouldEvolve(){ return evolutions.Count > 0; }
 
     public void ResetColor(){
-        spriteRenderer.color = player == 0 ? Color.white : Color.black;
+        spriteRenderer.color = player == 0 ? whiteColor : blackColor;
     }
 }
