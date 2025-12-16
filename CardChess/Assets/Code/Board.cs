@@ -108,10 +108,17 @@ public class Board : MonoBehaviour {
     }
 
     public void RemovePiece(Piece piece){
-        if(pieces.Contains(piece)){
-            pieces.Remove(piece);
-            piece.cell.piece = null;
-            Destroy(piece.gameObject); 
+        if(!pieces.Contains(piece)) return;
+
+        bool wasKing = piece.pieceType == "King";
+        int deadKingPlayer = piece.player;
+
+        pieces.Remove(piece);
+        piece.cell.piece = null;
+        Destroy(piece.gameObject);
+
+        if(wasKing){
+            globalManager.GameOver(deadKingPlayer ^ 1);
         }
     }
 

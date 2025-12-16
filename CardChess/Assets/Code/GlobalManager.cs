@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+
 
 public class GlobalManager : MonoBehaviour{
     
@@ -52,7 +54,22 @@ public class GlobalManager : MonoBehaviour{
         if(highlightedCells.Count == 0) selectedCard = null; // no valid cells
         else board.AddHighlights(highlightedCells);
     }
+    public void GameOver(int winningPlayer){
+        Debug.Log("Game Over! Player " + winningPlayer + " wins.");
 
+        // Optional: disable input
+        enabled = false;
+
+        // Optional: visual feedback
+        if(turnIndicator){
+            turnIndicator.color = Color.red;
+        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // TODO:
+        // - show UI popup
+        // - restart button
+        // - block further moves
+    }
     public void ClickedCell(Cell cell){
         
         // select this cell
