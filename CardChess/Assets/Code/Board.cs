@@ -36,6 +36,7 @@ public class Board : MonoBehaviour {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         pieces = new List<Piece>();
+        this.transform.position = Vector3.zero;
         RecreateBoard();
 
         // check if king exists in initial pieces, else add them
