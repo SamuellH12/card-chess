@@ -2688,7 +2688,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 119307011945039344, guid: dbeb6ce58acba2746982b93b53614723, type: 3}
       propertyPath: m_Name
-      value: Board Variant
+      value: JungleBoard
+      objectReference: {fileID: 0}
+    - target: {fileID: 119307011945039344, guid: dbeb6ce58acba2746982b93b53614723, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7352534304337061578, guid: dbeb6ce58acba2746982b93b53614723, type: 3}
       propertyPath: H

@@ -57,10 +57,13 @@ public class GlobalManager : MonoBehaviour{
         
         // select this cell
         if(selectedCell == null && selectedCard == null){
-            selectedCell = cell;
-            board.AddHighlight(cell, turn);
+            if(cell.piece != null && cell.piece.player == turn){
+                selectedCell = cell;
+                board.AddHighlight(cell, turn);
+            }
             return;
         }
+
 
         // deselect
         if(selectedCell == cell && selectedCard == null){

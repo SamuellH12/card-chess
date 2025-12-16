@@ -139,8 +139,8 @@ public class Board : MonoBehaviour {
                 cells[i,j].transform.position = new Vector3(i, j, 0);
                 
                 // if end, mark for pawn evolution
-                if(i == H-1) cells[i,j].canEvolveWhite = true;
-                if(i == 0  ) cells[i,j].canEvolveBlack = true;
+                if(j == W-1) cells[i,j].canEvolveWhite = true;
+                if(j == 0  ) cells[i,j].canEvolveBlack = true;
             }
         }
     }
