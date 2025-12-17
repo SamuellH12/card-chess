@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Elephant : Piece
 {
-    public override List<Cell> ListOfMoves(Board board)
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false)
     {
         List<Cell> moves = new List<Cell>();
         int x = cell.x;
@@ -35,12 +35,12 @@ public class Elephant : Piece
                         if(visited.Contains(neighbor)) continue;
                         visited.Add(neighbor);
 
-                        if(neighbor.IsEmpty()){
+                        if(neighbor.IsEmpty() || (couldAtack && neighbor.piece.pieceType == "King")){
                             moves.Add(neighbor);
                             queue.Enqueue(neighbor);
                         }
                         else 
-                        if (neighbor.HasEnemyPiece(player)) moves.Add(neighbor);
+                        if(neighbor.HasEnemyPiece(player) || couldAtack) moves.Add(neighbor);
                     }
                 }
             }

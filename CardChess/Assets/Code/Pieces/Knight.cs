@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Knight : Piece
 {
-    public override List<Cell> ListOfMoves(Board board)
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false)
     {
         List<Cell> moves = new List<Cell>();
         int x = cell.x;

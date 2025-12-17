@@ -47,7 +47,7 @@ public class Piece : MonoBehaviour
 
     // search for possible moves in the board
     // (to be implemented in subclasses)
-    public virtual List<Cell> ListOfMoves(Board board){
+    public virtual List<Cell> ListOfMoves(Board board, bool couldAtack = false){
         List<Cell> moves = new List<Cell>();
 
         // default: move for one step in any direction
@@ -70,7 +70,7 @@ public class Piece : MonoBehaviour
 
     // list only the cells that can be attacked by this piece
     public virtual List<Cell> ListOfAttacks(Board board, bool couldAtack = false){
-        return ListOfMoves(board);
+        return ListOfMoves(board, couldAtack);
     }
 
     public virtual bool CanEvolve(){

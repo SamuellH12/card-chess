@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Queen : Piece
 {
-    public override List<Cell> ListOfMoves(Board board)
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false)
     {
         List<Cell> moves = new List<Cell>();
         int x = cell.x;
@@ -23,7 +23,9 @@ public class Queen : Piece
             while(nx >= 0 && nx < board.H && ny >= 0 && ny < board.W)
             {
                 Cell targetCell = board.cells[nx, ny];
-                if(targetCell.piece == null) moves.Add(targetCell);
+                if(targetCell.IsEmpty()) moves.Add(targetCell);
+                else
+                if(couldAtack && targetCell.piece.pieceType == "King") moves.Add(targetCell);
                 else {
                     if(targetCell.piece.player != player) moves.Add(targetCell);
                     break;

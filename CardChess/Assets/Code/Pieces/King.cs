@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class King : Piece {
     
     // list of proibited moves for the king (moves that would place it in check)
-    public override List<Cell> ListOfMoves(Board board){
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false){
         List<Cell> moves = base.ListOfMoves(board);
         List<Cell> prohibitedMoves = new List<Cell>();
 

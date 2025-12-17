@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Pawn : Piece
 {
 
-    public override List<Cell> ListOfMoves(Board board)
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false)
     {
         List<Cell> moves = new List<Cell>();
         int direction = (player == 0) ? 1 : -1; // direction based on player
@@ -14,13 +14,13 @@ public class Pawn : Piece
         int ny = y + direction;
 
         // move forward
-        if(board.IsInsideBoard(x, ny) && board.cells[x, ny].piece == null)
+        if(board.IsInsideBoard(x, ny) && board.cells[x, ny].IsEmpty())
         {
             moves.Add(board.cells[x, ny]);
 
             // first move can be two steps
             int nny = y + 2 * direction;
-            if(!hasMoved && board.IsInsideBoard(x, nny) && board.cells[x, nny].piece == null)
+            if(!hasMoved && board.IsInsideBoard(x, nny) && board.cells[x, nny].IsEmpty())
                 moves.Add(board.cells[x, nny]);
         }
 
