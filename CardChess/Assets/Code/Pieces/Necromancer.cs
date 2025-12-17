@@ -61,6 +61,7 @@ public class Necromancer : Piece {
 
         // call manager to handle evolution
         if(CanEvolve()) cell.board.globalManager.HandleEvolution(this);
+        if(newCell.IsFrozen()) FrozenPiece(newCell.frozenUntilTurn);
     }
     
 }

@@ -40,6 +40,8 @@ public class Piece : MonoBehaviour
 
         // call manager to handle evolution
         if(CanEvolve()) cell.board.globalManager.HandleEvolution(this);
+
+        if(newCell.IsFrozen()) FrozenPiece(newCell.frozenUntilTurn);
     }
 
     public void CapturePiece(Piece targetPiece){
