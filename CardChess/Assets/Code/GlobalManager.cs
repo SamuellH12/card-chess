@@ -105,8 +105,14 @@ public class GlobalManager : MonoBehaviour{
             if(selectedCell.piece){
                 Piece piece = selectedCell.piece;
 
-                if(piece) piece.MoveToCell(cell);
-
+                if (piece && !board.WouldMoveCauseCheck(piece, cell)){
+                    piece.MoveToCell(cell);
+                }
+                else{
+                    board.ClearHighlights();
+                    selectedCell = null;
+                    return;
+                }
                 board.ClearHighlights();
                 selectedCell = null;
                 ActionComplete(1);
