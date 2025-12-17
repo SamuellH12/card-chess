@@ -87,7 +87,10 @@ public class Piece : MonoBehaviour
         spriteRenderer.color = player == 0 ? whiteColor : blackColor;
     }
 
-    public bool IsFrozen(){ return frozenUntilTurn >= cell.board.GetTurn(); }
+    public bool IsFrozen(){ 
+        if(cell == null || cell.board == null) return false;
+        return frozenUntilTurn >= cell.board.GetTurn(); 
+    }
     public void FrozenPiece(int until){ 
         frozenUntilTurn = Mathf.Max(until, frozenUntilTurn); 
         cell.UpdateFrozenIcon(true);

@@ -78,6 +78,9 @@ public class Cell : MonoBehaviour {
     public bool HasEnemyPiece(int player){ return piece != null && piece.player != player; }
     public bool EmptyOrEnemy(int player){ return piece == null || piece.player != player; }
     public bool IsFrozen(){ 
-        return frozenUntilTurn >= board.GetTurn() || (HasPiece() && piece.IsFrozen()); 
+        if(board == null) return false;
+        
+        bool isfro = frozenUntilTurn >= board.GetTurn();
+        return isfro || (HasPiece() && piece.IsFrozen());
     }
 }

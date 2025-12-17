@@ -298,7 +298,10 @@ public class Board : MonoBehaviour {
         return null;
     }
 
-    public int GetTurn(){ return globalManager.turnCount; }
+    public int GetTurn(){ 
+        if(globalManager == null) return 0;
+        return globalManager.turnCount; 
+    }
 
     public void UpdateTurnState(){
         for(int i=0; i<H; i++)
