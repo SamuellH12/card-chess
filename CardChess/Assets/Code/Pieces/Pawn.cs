@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public class Pawn : Piece
 {
 
-    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false)
-    {
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false){
         List<Cell> moves = new List<Cell>();
+        if(frozenUntilTurn >= board.globalManager.turnCount) return moves;
         int direction = (player == 0) ? 1 : -1; // direction based on player
 
         int x = cell.x;
@@ -27,9 +27,9 @@ public class Pawn : Piece
         return moves;
     }
 
-    public override List<Cell> ListOfAttacks(Board board, bool couldAtack = false)
-    {
+    public override List<Cell> ListOfAttacks(Board board, bool couldAtack = false){
         List<Cell> attacks = new List<Cell>();
+        if(frozenUntilTurn >= board.globalManager.turnCount) return attacks;
         int direction = (player == 0) ? 1 : -1; // direction based on player
 
         int x = cell.x;

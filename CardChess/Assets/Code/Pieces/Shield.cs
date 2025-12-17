@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class Shield : Piece
 {
-    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false)
-    {
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false){
         List<Cell> moves = new List<Cell>();
+        if(frozenUntilTurn >= board.globalManager.turnCount) return moves;
         int x = cell.x;
         int y = cell.y;
         int direction = (player == 0) ? 1 : -1;

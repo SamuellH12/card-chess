@@ -13,7 +13,9 @@ public class Cell : MonoBehaviour {
 
     public int x, y;
     public SpriteRenderer highlightImage;
+    public SpriteRenderer frozenImage;
     public Piece piece = null;
+    public int frozenUntilTurn = -1;
     
     [HideInInspector]
     public SpriteRenderer backgroundImage;
@@ -54,8 +56,28 @@ public class Cell : MonoBehaviour {
         highlightImage.enabled = false;
     }
 
+    public void UpdateFrozenIcon(bool state){
+        frozenImage.enabled = state;
+    }
+
+    public void FrozenCell(int until){
+        frozenUntilTurn = until;
+        if(IsFrozen()) UpdateFrozenIcon(true);
+    }
+    public void UnfrozeCell(){
+        frozenUntilTurn = -1;
+        UpdateFrozenIcon(false);
+    }
+
+    public void UpdateTurnState(){
+        if(!IsFrozen()) UnfrozeCell();
+    }
+
     public bool IsEmpty(){ return piece == null; }
     public bool HasPiece(){ return piece != null; }
     public bool HasEnemyPiece(int player){ return piece != null && piece.player != player; }
     public bool EmptyOrEnemy(int player){ return piece == null || piece.player != player; }
+    public bool IsFrozen(){ 
+        return frozenUntilTurn >= board.GetTurn() || (HasPiece() && piece.IsFrozen()); 
+    }
 }

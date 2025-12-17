@@ -9,7 +9,7 @@ public class GlobalManager : MonoBehaviour{
     [HideInInspector]
     public CardManager cardManager = null;
     public SpriteRenderer turnIndicator = null;
-    int turn = 0, turnCount = 0;
+    public int turn = 0, turnCount = 0;
 
     void Start(){
         cardManager = GetComponent<CardManager>(); // same object as card manager
@@ -22,6 +22,7 @@ public class GlobalManager : MonoBehaviour{
     public void NextTurn(){ //reset turn variables
         turn ^= 1; // switch turn
         turnCount += 1;
+        board.UpdateTurnState();
         cardManager.NextTurn();
         if(turnIndicator) turnIndicator.color = turn == 0 ? Color.white : Color.gray;
     }

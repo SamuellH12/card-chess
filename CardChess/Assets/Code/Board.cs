@@ -219,4 +219,12 @@ public class Board : MonoBehaviour {
                 return piece;
         return null;
     }
+
+    public int GetTurn(){ return globalManager.turnCount; }
+
+    public void UpdateTurnState(){
+        for(int i=0; i<H; i++)
+            for(int j=0; j<W; j++)
+                cells[i,j].UpdateTurnState();
+    }
 }

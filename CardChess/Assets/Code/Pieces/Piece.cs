@@ -11,6 +11,7 @@ public class Piece : MonoBehaviour
     public bool hasMoved = false;
     public Color whiteColor = Color.white;
     public Color blackColor = new Color(0.42f, 0.32f, 0.43f);
+    public int frozenUntilTurn = -1;
 
     void Start(){
         // change color based on player
@@ -49,6 +50,7 @@ public class Piece : MonoBehaviour
     // (to be implemented in subclasses)
     public virtual List<Cell> ListOfMoves(Board board, bool couldAtack = false){
         List<Cell> moves = new List<Cell>();
+        if(frozenUntilTurn >= board.globalManager.turnCount) return moves;
 
         // default: move for one step in any direction
         int x = cell.x, y = cell.y;
@@ -81,5 +83,15 @@ public class Piece : MonoBehaviour
 
     public void ResetColor(){
         spriteRenderer.color = player == 0 ? whiteColor : blackColor;
+    }
+
+    public bool IsFrozen(){ return frozenUntilTurn >= cell.board.GetTurn(); }
+    public void FrozenPiece(int until){ 
+        frozenUntilTurn = Mathf.Max(until, frozenUntilTurn); 
+        cell.UpdateFrozenIcon(true);
+    }
+    public void UnfrozePiece(){ 
+        frozenUntilTurn = -1; 
+        cell.UnfrozeCell();
     }
 }

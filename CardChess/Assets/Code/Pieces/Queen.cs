@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class Queen : Piece
 {
-    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false)
-    {
+    public override List<Cell> ListOfMoves(Board board, bool couldAtack = false){
         List<Cell> moves = new List<Cell>();
+        if(frozenUntilTurn >= board.GetTurn()) return moves;
         int x = cell.x;
         int y = cell.y;
 
@@ -20,8 +20,7 @@ public class Queen : Piece
             int nx = x + dx;
             int ny = y + dy;
 
-            while(nx >= 0 && nx < board.H && ny >= 0 && ny < board.W)
-            {
+            while(nx >= 0 && nx < board.H && ny >= 0 && ny < board.W){
                 Cell targetCell = board.cells[nx, ny];
                 if(targetCell.IsEmpty()) moves.Add(targetCell);
                 else
