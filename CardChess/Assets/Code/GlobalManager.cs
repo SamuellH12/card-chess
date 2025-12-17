@@ -28,6 +28,23 @@ public class GlobalManager : MonoBehaviour{
     }
 
     public void ActionComplete(int actionsUsed=-1){
+        int currentPlayer = turn;
+        int opponent = turn ^ 1;
+
+        // after action, before switching turn
+        if (board.IsCheckmate(opponent))
+        {
+            GameOver(currentPlayer);
+            return;
+        }
+            // Check for stalemate
+        if (board.IsStalemate(opponent))
+        {
+            Debug.Log("Stalemate!");
+            // decide behavior: draw, restart, etc.
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            return;
+        }
         NextTurn();
     }
 

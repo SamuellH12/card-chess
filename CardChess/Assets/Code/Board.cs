@@ -214,6 +214,33 @@ public class Board : MonoBehaviour {
         return emptyCells;
     }
 
+    public bool HasAnyLegalMove(int player){
+        foreach (Piece piece in new List<Piece>(pieces))
+        {
+            if (piece.player != player) continue;
+
+            List<Cell> moves = piece.ListOfMoves(this);
+            moves.AddRange(piece.ListOfAttacks(this));
+
+            foreach (Cell target in moves)
+            {
+                if (!WouldMoveCauseCheck(piece, target))
+                    return true;
+            }
+        }
+        return false;
+    }
+    
+    public bool IsCheckmate(int player){
+        if (!IsKingInCheck(player)) return false;
+        return !HasAnyLegalMove(player);
+    }
+
+    public bool IsStalemate(int player){
+        if (IsKingInCheck(player)) return false;
+        return !HasAnyLegalMove(player);
+    }
+
     private List<Cell> highlightedCells = new List<Cell>();
 
     public void AddHighlight(Cell cell, int player){
