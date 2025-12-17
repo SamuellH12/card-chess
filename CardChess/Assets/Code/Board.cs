@@ -122,6 +122,50 @@ public class Board : MonoBehaviour {
         }
     }
 
+    public bool IsKingInCheck(int player){
+        Piece king = GetKing(player);
+        if (king == null) return false;
+
+        Cell kingCell = king.cell;
+
+        foreach (Piece p in pieces)
+        {
+            if (p.player == player) continue;
+
+            List<Cell> attacks = p.ListOfAttacks(this);
+            if (attacks.Contains(kingCell))
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool WouldMoveCauseCheck(Piece piece, Cell target){
+        Cell originalCell = piece.cell;
+        Piece captured = target.piece;
+
+        // simulate
+        originalCell.piece = null;
+        piece.cell = target;
+        target.piece = piece;
+
+        if (captured != null)
+            pieces.Remove(captured);
+
+        bool inCheck = IsKingInCheck(piece.player);
+
+        // revert
+        piece.cell = originalCell;
+        originalCell.piece = piece;
+        target.piece = captured;
+
+        if (captured != null)
+            pieces.Add(captured);
+
+        return inCheck;
+    }
+
+
     public void RecreateBoard(){
         cells = new Cell[H,W];
 
@@ -180,8 +224,15 @@ public class Board : MonoBehaviour {
 
         if(cell.piece == null || cell.piece.player != player ) return;
 
-        List<Cell> moves = cell.piece.ListOfMoves(this);
-        moves.AddRange(cell.piece.ListOfAttacks(this)); // add atacks as well
+        List<Cell> rawMoves = cell.piece.ListOfMoves(this);
+        rawMoves.AddRange(cell.piece.ListOfAttacks(this));
+
+        List<Cell> moves = new List<Cell>();
+        foreach (Cell move in rawMoves)
+        {
+            if (!WouldMoveCauseCheck(cell.piece, move))
+                moves.Add(move);
+        }
         moves = new List<Cell>(new HashSet<Cell>(moves)); // unique
 
         foreach(Cell move in moves){
