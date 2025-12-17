@@ -122,6 +122,16 @@ public class Board : MonoBehaviour {
         }
     }
 
+    public void ChangePiece(Piece oldPiece, GameObject newPiece){
+        Cell cell = oldPiece.cell;
+        int player = oldPiece.player;
+
+        RemovePiece(oldPiece);
+        Destroy(oldPiece.gameObject);
+
+        AddPiece(newPiece, cell.x, cell.y, player);
+    }
+
     public bool IsKingInCheck(int player){
         Piece king = GetKing(player);
         if (king == null) return false;

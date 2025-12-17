@@ -10,6 +10,17 @@ public class GlobalManager : MonoBehaviour{
     public CardManager cardManager = null;
     public SpriteRenderer turnIndicator = null;
     public int turn = 0, turnCount = 0;
+    public bool isPaused = false;
+    public PauseMenu pauseMenu;
+    public GameObject evoScreen;
+    [HideInInspector]
+    public GameObject lastScreen = null;
+    [Header("Evolution UI")]
+    public Transform evoButtonContainer; // parent with GridLayoutGroup
+    public GameObject evoButtonPrefab;
+
+private Piece evolvingPiece;
+
 
     void Start(){
         cardManager = GetComponent<CardManager>(); // same object as card manager
@@ -52,6 +63,7 @@ public class GlobalManager : MonoBehaviour{
     private Cell selectedCell = null;
 
     public void ClickedCard(Card card){
+        if(isPaused) return;
         if(selectedCard == card){
             selectedCard = null;
             board.ClearHighlights();
@@ -89,7 +101,7 @@ public class GlobalManager : MonoBehaviour{
         // - block further moves
     }
     public void ClickedCell(Cell cell){
-        
+        if(isPaused) return;
         // select this cell
         if(selectedCell == null && selectedCard == null){
             if(cell.piece != null && cell.piece.player == turn){
@@ -144,28 +156,53 @@ public class GlobalManager : MonoBehaviour{
         selectedCard = null;
     }
 
-    public void HandleEvolution(Piece piece){
+    public void HandleEvolution(Piece piece)
+    {
         Debug.Log("Handling evolution for piece at " + piece.pieceType);
-        Debug.Log("Evolutions available: " + piece.evolutions.Count);
-        if(piece.evolutions.Count == 0) return;
 
-        // for simplicity, just evolve to the first option
-        GameObject evolutionPrefab = piece.evolutions[0];
+        if (piece.evolutions == null || piece.evolutions.Count == 0)
+            return;
 
-        // create new piece
-        GameObject newPieceObj = Instantiate(evolutionPrefab);
-        newPieceObj.transform.parent = board.transform;
+        PauseGame();
 
-        Piece newPiece = newPieceObj.GetComponent<Piece>();
-        newPiece.player = piece.player;
-        newPiece.MoveToCell(piece.cell);
+        evolvingPiece = piece;
+        lastScreen = pauseMenu.atual;
 
-        // remove old piece
-        board.pieces.Remove(piece);
-        Destroy(piece.gameObject);
+        evoScreen.SetActive(true);
 
-        board.pieces.Add(newPiece);
+        // Clear old buttons
+        foreach (Transform child in evoButtonContainer)
+            Destroy(child.gameObject);
 
-        Debug.Log("Piece evolved for player " + newPiece.player + " at cell " + newPiece.cell.x + "," + newPiece.cell.y);
+        RectTransform prefabRT = evoButtonPrefab.GetComponent<RectTransform>();
+        float buttonSize = prefabRT.rect.width;
+
+        float spacing = 1.1f * buttonSize;
+        float half = (piece.evolutions.Count - 1) / 2f;
+
+        Vector2 pos = new Vector2(-half * spacing, 0f);
+
+        foreach (GameObject evoPrefab in piece.evolutions)
+        {
+            GameObject btnObj = Instantiate(evoButtonPrefab, evoButtonContainer);
+
+            EvoButton btn = btnObj.GetComponent<EvoButton>();
+            btn.Init(this, piece, evoPrefab);
+
+            RectTransform btnRT = btnObj.GetComponent<RectTransform>();
+            btnRT.anchoredPosition = pos;
+
+            pos.x += spacing;
+        }
+
     }
+
+    public void ConfirmEvolution(Piece oldPiece, GameObject evolutionPrefab){
+        evoScreen.SetActive(false);
+        UnpauseGame();
+        board.ChangePiece(oldPiece, evolutionPrefab);
+    }
+
+    public void PauseGame(){ isPaused = true; }
+    public void UnpauseGame(){ isPaused = false; }
 }

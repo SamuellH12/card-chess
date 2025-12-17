@@ -25,4 +25,8 @@ public class ButtonManager : MonoBehaviour
         Application.Quit(); // Exits the game. You can't hit the quit button while in Unity Engine. 
     }
 
+    public void ReloadThisScene(){
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
 }

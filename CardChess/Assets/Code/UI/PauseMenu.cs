@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public GlobalManager globalManager;
+    public GameObject atual = null;
+    public void SwapScreen( GameObject next){
+        if(atual) atual.SetActive(false);
+        next.SetActive(true);
+        atual = next;
     }
 }
