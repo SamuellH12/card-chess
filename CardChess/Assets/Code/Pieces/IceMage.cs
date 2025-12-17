@@ -13,7 +13,8 @@ public class IceMage : Piece{
 
         int[,] knightMoves = new int[,] {
             { 2, 1}, { 2,-1}, {-2, 1}, {-2,-1},
-            { 1, 2}, { 1,-2}, {-1, 2}, {-1,-2}
+            { 1, 2}, { 1,-2}, {-1, 2}, {-1,-2},
+            {2, 0}, {-2, 0}, {0, 2}, {0, -2}
         };
 
         for(int i = 0; i < knightMoves.GetLength(0); i++){
